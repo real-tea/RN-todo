@@ -1,7 +1,13 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View , TouchableOpacity } from 'react-native';
+import Task from './components/Task';
+
 
 export default function App() {
+
+
+  const [ taskItems , setTaskItems ] = useState([]);
+
   return (
     <View style={styles.container}>
       <View style={styles.tasksWrapper}>
@@ -10,7 +16,16 @@ export default function App() {
 
           <View style = {styles.items}>
             {/* Tasks go here */}
-          
+            {
+            taskItems.map((item, index) => {
+              return (
+                <TouchableOpacity key={index}  onPress={() => completeTask(index)}>
+                  <Task text={item} /> 
+                </TouchableOpacity>
+              )
+            })
+          }
+
 
           </View>
 
