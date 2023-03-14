@@ -1,15 +1,35 @@
+import {useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View , TouchableOpacity } from 'react-native';
+import { KeyboardAvoidingView , StyleSheet, Text, View , Keyboard ,  TouchableOpacity , ScrollView , TextInput } from 'react-native';
 import Task from './components/Task';
 
 
 export default function App() {
 
-
+  const [ task , setTask ] = useState();
   const [ taskItems , setTaskItems ] = useState([]);
+
+
+  const handleAddTask = () => {
+    Keyboard.dismiss();
+    setTaskItems([...taskItems, task])
+    setTask(null);
+  }
+
+  const completeTask = () => {
+    let itemsCopy = [...taskItems];
+    itemsCopy.splice(index , 1)
+    setTaskItems(itemsCopy);
+  }
 
   return (
     <View style={styles.container}>
+
+    <ScrollView
+    contentContainerStyle={{
+      flexGrow : 1
+    }}
+    keyboardShouldPersistTaps='handled'>
       <View style={styles.tasksWrapper}>
 
           <Text style={styles.sectionTitle}>Today's Tasks</Text>
@@ -30,6 +50,21 @@ export default function App() {
           </View>
 
       </View>
+      </ScrollView>
+
+      {/* Use Keyboard Avoiding to avoid keyboard interference to the objects on the screen */}
+
+      <KeyboardAvoidingView
+      behavior={Platform.OS==="ios"?"padding" : "height"}
+      style={styles.writeTaskWrapper}>
+
+        <TextInput style={styles.input} placeholder={'write a task'} value={task} onChangeText = {text => setTask(text)}/>
+
+          <TouchableOpacity onPress={()=>handleAddTask()}>
+
+          </TouchableOpacity>
+
+      </KeyboardAvoidingView>
     </View>
   );
 }
